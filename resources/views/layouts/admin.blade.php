@@ -27,6 +27,10 @@
                    class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ request()->routeIs('admin.dashboard') ? 'bg-red-600 text-white font-bold' : 'text-slate-300 hover:bg-white/10' }}">
                     📊 Tableau de bord
                 </a>
+                <a href="{{ route('admin.users.index') }}"
+                   class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ request()->routeIs('admin.users.*') ? 'bg-red-600 text-white font-bold' : 'text-slate-300 hover:bg-white/10' }}">
+                    👥 Comptes
+                </a>
                 <a href="{{ route('admin.scholarships.index') }}"
                    class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ request()->routeIs('admin.scholarships.*') ? 'bg-red-600 text-white font-bold' : 'text-slate-300 hover:bg-white/10' }}">
                     🎓 Bourses

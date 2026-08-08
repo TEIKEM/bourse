@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\CourseEnrollmentStatusUpdated;
 use App\Models\CourseEnrollment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class CourseEnrollmentController extends Controller
@@ -79,8 +81,10 @@ class CourseEnrollmentController extends Controller
                 ->with('error', $e->getMessage());
         }
 
+        Mail::to($enrollment->user->email)->send(new CourseEnrollmentStatusUpdated($enrollment->fresh(['courseSession', 'user'])));
+
         return redirect()
             ->route('admin.enrollments.show', $enrollment->id)
-            ->with('success', 'Statut de l\'inscription mis à jour.');
+            ->with('success', 'Statut de l\'inscription mis à jour, et étudiant notifié par email.');
     }
 }

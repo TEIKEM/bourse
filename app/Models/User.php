@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -44,6 +43,11 @@ class User extends Authenticatable
     /**
      * Relations utiles pour le dashboard étudiant
      */
+ public function studentProfile()
+    {
+        return $this->hasOne(\App\Models\StudentProfile::class);
+    }
+
     public function scholarshipApplications()
     {
         return $this->hasMany(\App\Models\ScholarshipApplication::class);
@@ -52,9 +56,5 @@ class User extends Authenticatable
     public function courseEnrollments()
     {
         return $this->hasMany(\App\Models\CourseEnrollment::class);
-    }
-    public function studentProfile()
-    {
-        return $this->hasOne(\App\Models\StudentProfile::class);
     }
 }

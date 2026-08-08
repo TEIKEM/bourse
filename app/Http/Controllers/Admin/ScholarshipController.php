@@ -52,6 +52,22 @@ class ScholarshipController extends Controller
         return redirect()->route('admin.scholarships.index')->with('success', 'Bourse supprimée.');
     }
 
+    /**
+     * Augmente rapidement le nombre de places (utilisé depuis la fiche d'une candidature bloquée).
+     */
+    public function increaseCapacity(Request $request, Scholarship $scholarship): RedirectResponse
+    {
+        $amount = max(1, (int) $request->input('amount', 1));
+
+        if ($scholarship->capacity === null) {
+            $scholarship->update(['capacity' => $amount]);
+        } else {
+            $scholarship->increment('capacity', $amount);
+        }
+
+        return redirect()->back()->with('success', "{$amount} place(s) ajoutée(s) à la bourse.");
+    }
+
     private function validated(Request $request): array
     {
         $data = $request->validate([

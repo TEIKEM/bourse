@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ScholarshipApplicationStatusUpdated;
 use App\Models\ScholarshipApplication;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class ScholarshipApplicationController extends Controller
@@ -77,8 +79,10 @@ class ScholarshipApplicationController extends Controller
                 ->with('error', $e->getMessage());
         }
 
+        Mail::to($application->user->email)->send(new ScholarshipApplicationStatusUpdated($application->fresh(['scholarship', 'user'])));
+
         return redirect()
             ->route('admin.applications.show', $application->id)
-            ->with('success', 'Statut de la candidature mis à jour.');
+            ->with('success', 'Statut de la candidature mis à jour, et étudiant notifié par email.');
     }
 }

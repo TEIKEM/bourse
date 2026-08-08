@@ -69,6 +69,14 @@
                         Places restantes sur cette bourse : <strong class="{{ $application->scholarship->capacity <= 0 ? 'text-red-600' : 'text-[#0a1033]' }}">{{ $application->scholarship->capacity }}</strong>
                         @if($application->scholarship->capacity <= 0 && $application->status !== 'accepted')
                             <span class="block text-red-600 font-semibold mt-1">⚠️ Bourse complète — l'acceptation sera bloquée tant qu'aucune place ne se libère.</span>
+                            <form action="{{ route('admin.scholarships.increase-capacity', $application->scholarship->id) }}" method="POST" class="mt-2">
+                                @csrf
+                                @method('PATCH')
+                                <input type="hidden" name="amount" value="1">
+                                <button type="submit" class="text-xs font-bold text-white bg-[#0a1033] hover:bg-red-600 px-3 py-2 rounded-lg transition">
+                                    + Ajouter 1 place à cette bourse
+                                </button>
+                            </form>
                         @endif
                     </p>
                 @endif

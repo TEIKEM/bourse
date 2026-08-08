@@ -60,6 +60,14 @@
                         Places restantes sur la session : <strong class="{{ $enrollment->courseSession->capacity <= 0 ? 'text-red-600' : 'text-[#0a1033]' }}">{{ $enrollment->courseSession->capacity }}</strong>
                         @if($enrollment->courseSession->capacity <= 0 && $enrollment->status !== 'confirmed')
                             <span class="block text-red-600 font-semibold mt-1">⚠️ Session complète — confirmer débloquera une erreur tant qu'aucune place ne se libère.</span>
+                            <form action="{{ route('admin.courses.increase-capacity', $enrollment->courseSession->id) }}" method="POST" class="mt-2">
+                                @csrf
+                                @method('PATCH')
+                                <input type="hidden" name="amount" value="1">
+                                <button type="submit" class="text-xs font-bold text-white bg-[#0a1033] hover:bg-red-600 px-3 py-2 rounded-lg transition">
+                                    + Ajouter 1 place à cette session
+                                </button>
+                            </form>
                         @endif
                     </p>
                 @endif

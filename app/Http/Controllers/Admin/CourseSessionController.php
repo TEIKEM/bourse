@@ -52,6 +52,22 @@ class CourseSessionController extends Controller
         return redirect()->route('admin.courses.index')->with('success', 'Cours supprimé.');
     }
 
+    /**
+     * Augmente rapidement le nombre de places (utilisé depuis la fiche d'une inscription bloquée).
+     */
+    public function increaseCapacity(Request $request, CourseSession $course): RedirectResponse
+    {
+        $amount = max(1, (int) $request->input('amount', 1));
+
+        if ($course->capacity === null) {
+            $course->update(['capacity' => $amount]);
+        } else {
+            $course->increment('capacity', $amount);
+        }
+
+        return redirect()->back()->with('success', "{$amount} place(s) ajoutée(s) à la session.");
+    }
+
     private function validated(Request $request): array
     {
         $data = $request->validate([

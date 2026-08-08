@@ -293,7 +293,7 @@
     </section>
 
     <!-- 4. CATALOGUE DES BOURSES — image de fond visible -->
-    <section id="bourses" class="relative py-20 lg:py-28 text-white overflow-hidden">
+    <section id="bourses" class="relative py-20 lg:py-28 text-white bg-blue-950 overflow-hidden">
 
         <div class="absolute inset-0 z-0">
             <img src="{{ asset('images/bourses-bg.jpg') }}"

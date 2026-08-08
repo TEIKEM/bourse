@@ -67,6 +67,32 @@ class ScholarshipApplicationController extends Controller
             ->with('success', 'Ta candidature a bien été envoyée ! Notre équipe te contactera prochainement.');
     }
 
+    /**
+     * Permet à l'étudiant de retirer sa propre candidature, uniquement si elle est encore "pending".
+     */
+    public function destroy(Scholarship $scholarship): \Illuminate\Http\RedirectResponse
+    {
+        $application = ScholarshipApplication::where('user_id', auth()->id())
+            ->where('scholarship_id', $scholarship->id)
+            ->first();
+
+        if (! $application) {
+            return redirect()->route('dashboard')->with('error', 'Aucune candidature trouvée pour cette bourse.');
+        }
+
+        if ($application->status !== 'pending') {
+            return redirect()->route('dashboard')->with('error', 'Cette candidature est déjà en cours de traitement, elle ne peut plus être retirée.');
+        }
+
+        foreach ($application->documents as $doc) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($doc->path);
+        }
+
+        $application->delete();
+
+        return redirect()->route('dashboard')->with('success', 'Ta candidature a été retirée.');
+    }
+
     private function storeDocument(ScholarshipApplication $application, $file, string $label): void
     {
         $path = $file->store('applications/' . $application->id, 'public');
